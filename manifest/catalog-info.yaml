@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{ values.namespace }}
+  {%- if values.description %}
+  description: ${{ values.description }}
+  {%- endif %}
+  links:
+  - url: https://openshift-gitops-server-openshift-gitops.${{ values.cluster_url }}/applications/openshift-gitops/${{ values.namespace }}
+    title: ArgoCD
+    icon: dashboard
+  - url: https://${{ values.namespace }}-${{ values.app_name }}.${{ values.cluster_url }}
+    title: Application
+    icon: dashboard
+  - url: https://${{ values.git_host_url }}/${{ values.git_owner_name }}/${{ values.namespace }}
+    title: App Repository
+    icon: dashboard
+  annotations:
+    argocd/app-selector: argocd.argoproj.io/instance=${{ values.namespace }}
+    backstage.io/kubernetes-id: ${{ values.namespace }}
+    backstage.io/kubernetes-namespace: ${{ values.namespace }}
+    github.com/project-slug: ${{ values.git_owner_name }}/${{ values.namespace }}
+spec:
+  type: api 
+  system: ${{ values.system | dump }}
+  lifecycle: production
+  owner: ${{ values.owner | dump }}
+  git: ${{ values.git }}
+  git_host_url: ${{ values.git_host_url }}
+  git_owner_name: ${{ values.git_owner_name }}
