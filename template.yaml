@@ -15,7 +15,7 @@ spec:
       required:
         - namespace
       properties:
-        app_name:
+        namespace:
           title: Namespace Name
           type: string
           default: "sc-demo"
