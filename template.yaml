@@ -64,7 +64,7 @@ spec:
         argoInstance: main
         namespace: openshift-gitops
         repoUrl: https://github.com/rhdh-skitamura-org/${{ parameters.namespace }}.git
-        path: 'argocd/'
+        path: 'manifest/argocd/'
 
   output:
     links:
