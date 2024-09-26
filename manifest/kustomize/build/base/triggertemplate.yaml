@@ -1,0 +1,48 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: ${{ values.namespace }}-pipeline-template
+spec:
+  params:
+    - name: git-app-rev
+      description: The git revision
+      default: develop
+    - name: git-app-url
+      description: The app git repository url
+    - name: git-user
+    - name: git-email
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: ${{ values.namespace }}-pipeline-run-
+      spec:
+        pipelineRef:
+          name: ${{ values.namespace }}-pipeline
+        serviceAccountName: pipeline-sa
+        params:
+          - name: git-url
+            value: $(tt.params.git-app-url)
+          - name: git-revision
+            value: $(tt.params.git-app-rev)
+          - name: git-manifests-username
+            value: $(tt.params.git-user)
+          - name: git-manifests-useremail
+            value: $(tt.params.git-email)
+        workspaces:
+          - name: shared-workspace
+            persistentVolumeClaim:
+              claimName: ${{ values.namespace }}-shared-workspace
+          - name: vul-cache
+            emptyDir: {}
+          - name: sonar-settings
+            secret:
+              secretName: sonar-settings
+          - name: temp-dir
+            emptyDir: {}
+          - name: basic-auth
+            secret:
+              secretName: ${{ values.git }}-basic-auth
+          - name: quay-credentials
+            secret:
+              secretName: quay-credentials

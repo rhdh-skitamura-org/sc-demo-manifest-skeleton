@@ -1,0 +1,14 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: es-${{ values.git }}-webhook
+spec:
+  secretStoreRef:
+    name: awssm
+    kind: ClusterSecretStore
+  target:
+    name: ${{ values.git }}-webhook
+  data:
+  - secretKey: env.yml
+    remoteRef:
+      key: env-${{ values.git }}.yml

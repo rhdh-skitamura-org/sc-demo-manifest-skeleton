@@ -1,0 +1,75 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: summit-connect-bootstrap-template
+  title: Summit Connect Demo Namespace & CI Pipeline
+  description: Provides the CI sample code.
+  tags:
+    - recommended
+spec:
+  owner: user:default/skitamura7446
+  type: service
+
+  parameters:
+    - title: Namespace 
+      required:
+        - namespace
+      properties:
+        app_name:
+          title: Namespace Name
+          type: string
+          default: "sc-demo"
+      
+  steps:
+    - id: bootstrap-template
+      name: Generating the CI Source Code Component
+      action: fetch:template
+      input:
+        url: ./
+        copyWithoutTemplating:
+          - .github/workflows/
+        values:
+          namespace: ${{ parameters.namespace }}
+          git: "github"
+          git_host_url: "github.com"
+          git_owner_name: "rhdh-skitamura-org"
+          owner: "group:rhdh-skitamura-org/skitamura-team"
+          system: "system:default/test-system-github"
+          description: ""
+          cluster_url: "apps.rosa.rosa-hcp-1544.kfnj.p3.openshiftapps.com"
+        targetPath: ./tenant-app
+
+    - id: publish-bootstrap
+      name: Publish CI Repository to GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=rhdh-skitamura-org&repo=${{ parameters.namespace }}
+        repoVisibility: public
+        sourcePath: ./tenant-app
+        defaultBranch: develop
+        protectDefaultBranch: false
+    
+    - id: register-to-github
+      name: Registering the Catalog Info Component to GitHub
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish-app-to-github'].output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+    - id: create-argocd-resources
+      name: Create ArgoCD Resources
+      action: argocd:create-resources
+      input:
+        appName: ${{ parameters.namespace }}
+        argoInstance: main
+        namespace: openshift-gitops
+        repoUrl: https://github.com/rhdh-skitamura-org/${{ parameters.namespace }}.git
+        path: 'argocd/'
+
+  output:
+    links:
+      - title: Open the Source Code Repository
+        url: ${{ steps['publish-app-to-github'].output.remoteUrl }}
+      - title: Open the Catalog Info Component
+        icon: catalog
+        entityRef: ${{ steps['register-to-github'].output.entityRef }}

@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  backstage.io/kubernetes-id: ${{ values.namespace }}
+
+resources:
+  # pipelines
+  - pipeline.yaml
+  #- pipelinerun.yaml
+  # tasks
+  - git-cli.yaml
+  - git-clone.yaml
+  - kustomize.yaml
+  - argocd-sync.yaml
+  # preparations
+  - pipeline-sa.yaml
+  - tekton-pvc.yaml
+  - trigger-sa.yaml
+  - triggertemplate.yaml
+  # secrets
+  - es-basic-auth.yaml
+  - es-webhook-secret.yaml
+  - es-webhook.yaml
+  - es-quay-credentials.yaml
+  - es-argocd-credentials.yaml
+  # configmaps
+  - cm-argocd.yaml
