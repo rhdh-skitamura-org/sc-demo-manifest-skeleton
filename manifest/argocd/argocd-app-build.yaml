@@ -12,7 +12,7 @@ spec:
     repoURL: https://${{ values.git_host_url }}/${{ values.git_owner_name }}/${{ values.namespace }}.git 
     targetRevision: develop
     #path: ./kustomize/build/overlays/${{ values.git }}
-    path: ./kustomize/build/overlays/github
+    path: ./manifest/kustomize/build/overlays/github
   destination:
     server: https://kubernetes.default.svc
     namespace: ${{ values.namespace }}
