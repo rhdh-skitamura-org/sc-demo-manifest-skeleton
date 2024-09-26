@@ -78,7 +78,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: trigger-sa
-    namespace: ${{values.namespace}}-develop
+    namespace: ${{values.namespace}}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

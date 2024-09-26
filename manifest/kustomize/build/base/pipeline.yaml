@@ -26,10 +26,6 @@ spec:
     type: string
   - name: git-revision  
     type: string
-  - name: git-manifests-url
-    type: string
-  - name: git-manifests-revision  
-    type: string
   - name: git-manifests-username 
     type: string
     description: Git Repo Username for Manifests

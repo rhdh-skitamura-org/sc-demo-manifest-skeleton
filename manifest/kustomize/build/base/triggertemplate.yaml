@@ -4,6 +4,8 @@ metadata:
   name: ${{ values.namespace }}-pipeline-template
 spec:
   params:
+    - name: app-name
+      description: The application name
     - name: git-app-rev
       description: The git revision
       default: develop
