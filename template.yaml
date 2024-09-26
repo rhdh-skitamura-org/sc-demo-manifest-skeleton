@@ -53,7 +53,7 @@ spec:
       name: Registering the Catalog Info Component to GitHub
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps['publish-app-to-github'].output.repoContentsUrl }}
+        repoContentsUrl: ${{ steps['publish-bootstrap'].output.repoContentsUrl }}
         catalogInfoPath: "/catalog-info.yaml"
 
     - id: create-argocd-resources
@@ -69,7 +69,7 @@ spec:
   output:
     links:
       - title: Open the Source Code Repository
-        url: ${{ steps['publish-app-to-github'].output.remoteUrl }}
+        url: ${{ steps['publish-bootstrap'].output.remoteUrl }}
       - title: Open the Catalog Info Component
         icon: catalog
         entityRef: ${{ steps['register-to-github'].output.entityRef }}
