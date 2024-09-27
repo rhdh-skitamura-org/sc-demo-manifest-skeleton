@@ -26,6 +26,9 @@ spec:
     type: string
   - name: git-revision  
     type: string
+  - name: git-manifests-revision  
+    type: string
+    default: main
   - name: git-manifests-username 
     type: string
     description: Git Repo Username for Manifests
@@ -114,15 +117,15 @@ spec:
     - name: GIT_USER_EMAIL
       value: $(params.git-manifests-useremail)
     - name: GIT_MANIFEST_REV
-      value: $(params.git-revision)
+      value: $(params.git-manifests-revision)
     - name: GIT_SCRIPT
       value: |
         cd $(workspaces.source.path)
-        git checkout $(params.git-revision)
+        git checkout $(params.git-manifest-revision)
         git diff
         git add -A manifest/kustomize/app/overlays/
         git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
-        git push origin $(params.git-revision)
+        git push origin $(params.git-manifests-revision)
   - name: argocd-sync
     taskRef:
       kind: Task
@@ -135,4 +138,4 @@ spec:
     - name: argocd-version
       value: $(params.argocd-version)
     - name: revision
-      value: develop
+      value: main
