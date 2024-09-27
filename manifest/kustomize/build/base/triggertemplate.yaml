@@ -23,6 +23,8 @@ spec:
           name: ${{ values.namespace }}-pipeline
         serviceAccountName: pipeline-sa
         params:
+          - name: app-name
+            value: $(tt.params.app-name)
           - name: git-url
             value: $(tt.params.git-app-url)
           - name: git-revision
