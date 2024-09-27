@@ -17,7 +17,7 @@ resources:
   - pipeline-sa.yaml
   - tekton-pvc.yaml
   - trigger-sa.yaml
-  - triggertemplate.yaml
+  #- triggertemplate.yaml
   # secrets
   - es-basic-auth.yaml
   - es-webhook-secret.yaml
