@@ -121,7 +121,7 @@ spec:
     - name: GIT_SCRIPT
       value: |
         cd $(workspaces.source.path)
-        git checkout $(params.git-manifest-revision)
+        git checkout $(params.git-manifests-revision)
         git diff
         git add -A manifest/kustomize/app/overlays/
         git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
