@@ -114,15 +114,15 @@ spec:
     - name: GIT_USER_EMAIL
       value: $(params.git-manifests-useremail)
     - name: GIT_MANIFEST_REV
-      value: $(params.git-manifests-revision)
+      value: $(params.git-revision)
     - name: GIT_SCRIPT
       value: |
         cd $(workspaces.source.path)
-        git checkout $(params.git-manifests-revision)
+        git checkout $(params.git-revision)
         git diff
         git add -A manifest/kustomize/app/overlays/
         git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
-        git push origin $(params.git-manifests-revision)
+        git push origin $(params.git-revision)
   - name: argocd-sync
     taskRef:
       kind: Task
