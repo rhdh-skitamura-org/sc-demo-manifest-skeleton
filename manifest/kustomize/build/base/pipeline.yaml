@@ -37,7 +37,7 @@ spec:
     default: v2.11.6
   - name: image-registry
     type: string
-    default: quay-registry-quay-quay.apps.rosa.rosa-hcp-1544.fnn1.p3.openshiftapps.com/skitamura-quay-org/${{ values.namespace }}
+    default: quay-registry-quay-quay.apps.rosa.rosa-hcp-1544.kfnj.p3.openshiftapps.com/skitamura-quay-org/${{ values.namespace }}
 #  - name: git-manifests-user-access-token 
 #    type: string
 #    description: Git Repo User Access Token for Manifests
