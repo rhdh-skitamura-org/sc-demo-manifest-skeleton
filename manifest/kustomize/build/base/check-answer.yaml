@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: check-answer
+spec:
+  params:
+    - name: deployment-name
+      description: The name of the deployment to check
+      type: string
+    - name: namespace
+      description: The namespace where the deployment is located
+      type: string
+  steps:
+    - name: check-answer
+      image: openshift/origin-cli:latest
+      script: |
+        #!/bin/sh
+        DEPLOYMENT_NAME=$(params.deployment-name)
+        NAMESPACE=$(params.namespace)
+        
+        LABEL_1=$(oc get deployment $DEPLOYMENT_NAME -n $NAMESPACE -o jsonpath='{.metadata.labels.awsner1}')
+        
+        if [ "$LABEL_1" = "outerloop" ]; then
+          echo "Deployment $DEPLOYMENT_NAME has label awswer1=outerloop. Failing the task."
+          exit 1
+        else
+          echo "Deployment $DEPLOYMENT_NAME Proceeding."
+        fi
+        
+        LABEL_2=$(oc get deployment $DEPLOYMENT_NAME -n $NAMESPACE -o jsonpath='{.metadata.labels.awsner2}')
+        
+        if [ "$LABEL_2" = "innerloop" ]; then
+          echo "Deployment $DEPLOYMENT_NAME has label awswer2=innerloop. Failing the task."
+          exit 1
+        else
+          echo "Deployment $DEPLOYMENT_NAME Proceeding."
+        fi

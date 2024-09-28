@@ -81,6 +81,15 @@ spec:
     - name: TLSVERIFY
       value: 'false'
 
+  - name: check-answer
+      taskRef:
+        name: check-answer
+      params:
+        - name: deployment-name
+          value: $(params.app-name)
+        - name: namespace
+          value: ${{ values.namespace }}
+
   - name: resync
     params:
       - name: COMPONENT_ID
