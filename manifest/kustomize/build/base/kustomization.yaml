@@ -14,6 +14,7 @@ resources:
   - kustomize.yaml
   - argocd-sync.yaml
   - resync.yaml
+  - check-answer.yaml
   # preparations
   - pipeline-sa.yaml
   - tekton-pvc.yaml
