@@ -82,13 +82,15 @@ spec:
       value: 'false'
 
   - name: check-answer
-      taskRef:
-        name: check-answer
-      params:
-        - name: deployment-name
-          value: $(params.app-name)
-        - name: namespace
-          value: ${{ values.namespace }}
+    taskRef:
+      name: check-answer
+    runAfter:
+    - build-container
+    params:
+    - name: deployment-name
+      value: $(params.app-name)
+    - name: namespace
+      value: ${{ values.namespace }}
 
   - name: resync
     params:
