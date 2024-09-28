@@ -79,6 +79,15 @@ spec:
     - name: TLSVERIFY
       value: 'false'
 
+  - name: resync
+    params:
+      - name: COMPONENT_ID
+        value: $(params.app-name)
+    runAfter:
+      - build-container
+    taskRef:
+      kind: Task
+      name: resync
 #  - name: update-manifests
 #    taskRef:
 #      kind: Task
@@ -128,15 +137,6 @@ spec:
 #        git add -A manifest/kustomize/app/overlays/
 #        git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
 #        git push origin $(params.git-revision)
-    - name: resync
-      params:
-        - name: COMPONENT_ID
-          value: $(params.app-name)
-      runAfter:
-        - build-container
-      taskRef:
-        kind: Task
-        name: resync
 
 #  - name: argocd-sync
 #    taskRef:
