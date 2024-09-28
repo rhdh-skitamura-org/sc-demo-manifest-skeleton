@@ -97,7 +97,7 @@ spec:
       - name: COMPONENT_ID
         value: $(params.app-name)
     runAfter:
-      - build-container
+      - check-answer
     taskRef:
       kind: Task
       name: resync
