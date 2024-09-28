@@ -72,71 +72,82 @@ spec:
       workspace: quay-credentials
     params:
     - name: IMAGE
-      value: $(params.image-registry)/$(params.app-name):$(params.git-revision)
+      #value: $(params.image-registry)/$(params.app-name):$(params.git-revision)
+      value: $(params.image-registry)/$(params.app-name):latest
     - name: CONTEXT
       value: $(workspaces.source.path)
     - name: TLSVERIFY
       value: 'false'
 
-  - name: update-manifests
-    taskRef:
-      kind: Task
-      name: kustomize
-    runAfter:
-    - build-container
-    workspaces:
-    - name: manifest-dir
-      workspace: shared-workspace
-    params:
-    - name: KUSTOMIZE_SCRIPT
-      value: |
-        cd manifest/kustomize/app/overlays/dev
-        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
-        cd ../stg
-        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
-        cd ../prod
-        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
+#  - name: update-manifests
+#    taskRef:
+#      kind: Task
+#      name: kustomize
+#    runAfter:
+#    - build-container
+#    workspaces:
+#    - name: manifest-dir
+#      workspace: shared-workspace
+#    params:
+#    - name: KUSTOMIZE_SCRIPT
+#      value: |
+#        cd manifest/kustomize/app/overlays/dev
+#        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
+#        cd ../stg
+#        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
+#        cd ../prod
+#        kustomize edit set image ___IMAGE_URL___@___IMAGE_DIGEST___=$(params.image-registry)/$(params.app-name)@$(tasks.build-container.results.IMAGE_DIGEST)
+#
+#
+#  - name: push-manifests
+#    taskRef:
+#      kind: Task
+#      name: git-cli
+#    runAfter:
+#    - update-manifests
+#    workspaces:
+#    - name: source
+#      workspace: shared-workspace
+#    - name: input
+#      workspace: temp-dir
+#    - name: basic-auth
+#      workspace: basic-auth
+#    params:
+#    - name: GIT_USER_NAME
+#      value: $(params.git-manifests-username)
+#    - name: GIT_USER_EMAIL
+#      value: $(params.git-manifests-useremail)
+#    - name: GIT_MANIFEST_REV
+#      value: $(params.git-manifests-revision)
+#    - name: GIT_SCRIPT
+#      value: |
+#        #cd $(workspaces.source.path)
+#        #git checkout $(params.git-manifests-revision)
+#        #git diff
+#        git branch -a
+#        git add -A manifest/kustomize/app/overlays/
+#        git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
+#        git push origin $(params.git-revision)
+    - name: resync
+      params:
+        - name: COMPONENT_ID
+          value: $(params.app-name)
+      runAfter:
+        - build-container
+      taskRef:
+        kind: Task
+        name: resync
 
-
-  - name: push-manifests
-    taskRef:
-      kind: Task
-      name: git-cli
-    runAfter:
-    - update-manifests
-    workspaces:
-    - name: source
-      workspace: shared-workspace
-    - name: input
-      workspace: temp-dir
-    - name: basic-auth
-      workspace: basic-auth
-    params:
-    - name: GIT_USER_NAME
-      value: $(params.git-manifests-username)
-    - name: GIT_USER_EMAIL
-      value: $(params.git-manifests-useremail)
-    - name: GIT_MANIFEST_REV
-      value: $(params.git-manifests-revision)
-    - name: GIT_SCRIPT
-      value: |
-        #cd $(workspaces.source.path)
-        #git checkout $(params.git-manifests-revision)
-        #git diff
-        git branch -a
-        git add -A manifest/kustomize/app/overlays/
-        git commit -m "[TEKTON-PIPELINES] Change container image in manifests."
-        git push origin $(params.git-revision)
-  - name: argocd-sync
-    taskRef:
-      kind: Task
-      name: argocd-task-sync-and-wait
-    runAfter: 
-    - push-manifests
-    params:
-    - name: application-name
-      value: $(params.app-name)
-    - name: argocd-version
-      value: $(params.argocd-version)
-    - name: revision
-      value: main
+#  - name: argocd-sync
+#    taskRef:
+#      kind: Task
+#      name: argocd-task-sync-and-wait
+#    runAfter: 
+#    - push-manifests
+#    params:
+#    - name: application-name
+#      value: $(params.app-name)
+#    - name: argocd-version
+#      value: $(params.argocd-version)
+#    - name: revision
+#      value: main

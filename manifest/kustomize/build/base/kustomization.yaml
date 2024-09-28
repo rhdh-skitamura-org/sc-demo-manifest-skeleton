@@ -13,6 +13,7 @@ resources:
   - git-clone.yaml
   - kustomize.yaml
   - argocd-sync.yaml
+  - resync.yaml
   # preparations
   - pipeline-sa.yaml
   - tekton-pvc.yaml
