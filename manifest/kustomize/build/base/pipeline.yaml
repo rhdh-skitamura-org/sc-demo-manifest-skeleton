@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: ${{ values.namespace }}-pipeline
+  labels:
+    pipeline: 'true'
 spec:
   workspaces:
   - name: shared-workspace
