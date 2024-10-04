@@ -32,8 +32,8 @@ spec:
           namespace: ${{ parameters.namespace }}
           git: "github"
           git_host_url: "github.com"
-          git_owner_name: "rhdh-skitamura-org"
-          owner: "group:rhdh-skitamura-org/skitamura-team"
+          git_group_name: "rhdh-skitamura-org"
+          owner: "user:default/skitamura7446"
           system: "system:default/test-system-github"
           description: ""
           cluster_url: "apps.rosa.rosa-hcp-1544.kfnj.p3.openshiftapps.com"
